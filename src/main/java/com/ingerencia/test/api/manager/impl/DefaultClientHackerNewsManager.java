@@ -101,7 +101,7 @@ public class DefaultClientHackerNewsManager implements ClientHackerNewsManager {
 							.map(n -> {
 								return new HackerNewsEntity(
 										n.getObjectID(), 
-										getTitle(n), 
+										this.inGerenciaUtil.getTitle(n), 
 										n.getCreated(), 
 										n.getAuthor(), 
 										Boolean.FALSE);
@@ -119,7 +119,7 @@ public class DefaultClientHackerNewsManager implements ClientHackerNewsManager {
 							.map(n -> {
 								return new HackerNewsEntity(
 										n.getObjectID(), 
-										getTitle(n), 
+										this.inGerenciaUtil.getTitle(n), 
 										n.getCreated(), 
 										n.getAuthor(), 
 										Boolean.FALSE);
@@ -136,25 +136,5 @@ public class DefaultClientHackerNewsManager implements ClientHackerNewsManager {
 			log.error("Error persistiendo  Noticias ", ex);
 			throw new InGerenciaException("Error persistiendo  Noticias");
 		}
-	}
-	
-	/**
-	 * Metodo Utilitario que se encarga de onbtener el titulo de la noticia. Se encarga de obrener el valor desde los 
-	 * campos <b>title</b> o <b>story_title</b>
-	 * @param hit - Objeto con los datos de la Noticia
-	 * @return El titulo de la noticia
-	 */
-	private String getTitle(HackerNewsResponse.Hit hit) {
-		String title = null;
-		
-		if(StringUtils.isNotBlank(hit.getTitle())){
-			 title = hit.getTitle();
-		} else if(StringUtils.isNotBlank(hit.getStoryTitle())) {
-			title = hit.getStoryTitle();
-		} else { 
-			title = StringUtils.EMPTY; 
-		}
-		
-		return title;
 	}
 }
