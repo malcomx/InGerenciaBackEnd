@@ -12,13 +12,14 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import com.ingerencia.test.api.NetworkUtil;
 import com.ingerencia.test.api.entity.HackerNewsEntity;
 import com.ingerencia.test.api.exception.InGerenciaException;
 import com.ingerencia.test.api.manager.ClientHackerNewsManager;
 import com.ingerencia.test.api.model.HackerNewsModel;
 import com.ingerencia.test.api.repository.HackerNewsRepository;
 import com.ingerencia.test.api.response.HackerNewsResponse;
+import com.ingerencia.test.api.util.InGerenciaUtil;
+import com.ingerencia.test.api.util.NetworkUtil;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -34,14 +35,16 @@ public class DefaultClientHackerNewsManager implements ClientHackerNewsManager {
 	@Setter
 	@Autowired
 	private NetworkUtil networkUtil;
+
+	@Setter
+	@Autowired
+	private InGerenciaUtil inGerenciaUtil;
 	
 	@Transactional
 	@Override
 	public List<HackerNewsModel> getAllNews() throws InGerenciaException {
 		
 		try {
-			List<HackerNewsModel> response = Collections.emptyList();
-			
 			// TODO Obtiene las noticias desde la API de Hacker News
 			HackerNewsResponse remoteResponse = this.networkUtil.hackerNewsGetWithBlock();
 			
@@ -51,19 +54,7 @@ public class DefaultClientHackerNewsManager implements ClientHackerNewsManager {
 			// TODO Consulta en la base de datos las noticias activas
 			List<HackerNewsEntity> entities = (List<HackerNewsEntity>) this.newsRepository.findByDeletedFalseOrderByCreatedDesc();
 			
-			// TODO Mapea la respuesta al objeto HackerNewsModel, que contiene los datos de la API
-			if(!CollectionUtils.isEmpty(entities)) {
-				// Mapea el objeto entity al modelo
-				response = entities
-						.stream()
-						.map(n -> {
-							return new HackerNewsModel(n.getTitle(), n.getAuthor(), n.getCreated(), n.getObjectID());
-						})
-						.collect(Collectors.toList());
-			}
-			
-
-			return response;
+			return inGerenciaUtil.build(entities);
 			
 		} catch (Exception ex) {
 			log.error("Error obteniendo las noticias", ex);
@@ -73,12 +64,15 @@ public class DefaultClientHackerNewsManager implements ClientHackerNewsManager {
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	@Override
-	public String removeNews(String id) throws InGerenciaException {
+	public List<HackerNewsModel> removeNews(String id) throws InGerenciaException {
 		try {
 			// TODO Coloca con estado ELIMINADO = TRUE al registro de noticia
 			this.newsRepository.setFixedDeletedFor(Boolean.TRUE, id);
+
+			// TODO Consulta en la base de datos las noticias activas
+			List<HackerNewsEntity> entities = (List<HackerNewsEntity>) this.newsRepository.findByDeletedFalseOrderByCreatedDesc();
 			
-			return "HECHO";
+			return inGerenciaUtil.build(entities);
 			
 		} catch (Exception ex) {
 			log.error("Error persistiendo en Remove News", ex);

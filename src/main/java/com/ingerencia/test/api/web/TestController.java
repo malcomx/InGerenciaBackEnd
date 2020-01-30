@@ -2,10 +2,8 @@ package com.ingerencia.test.api.web;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,13 +51,10 @@ public class TestController {
 	}
 	
 	@CrossOrigin
-	@DeleteMapping(value = "/news/{id}")
-	public String removeNews(@PathVariable(name = "id") String id) throws InGerenciaException {
+	@GetMapping(value = "/news/{id}")
+	public List<HackerNewsModel> removeNews(@PathVariable(name = "id") String id) throws InGerenciaException {
 //		"Telf: 0212-9080624"
 		try {
-			if(!StringUtils.isNumeric(id))
-				return "El ID de la noticia no contiene el formato adecuado";
-			
 			// Obtiene las noticias
 			return this.clientHackerNewsManager.removeNews(id);
 		

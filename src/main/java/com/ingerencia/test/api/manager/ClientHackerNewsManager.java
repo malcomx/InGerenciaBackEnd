@@ -21,7 +21,7 @@ public interface ClientHackerNewsManager {
 	 * @return
 	 * @throws InGerenciaException
 	 */
-	String removeNews(String id) throws InGerenciaException;
+	List<HackerNewsModel> removeNews(String id) throws InGerenciaException;
 	
 	/**
 	 * 

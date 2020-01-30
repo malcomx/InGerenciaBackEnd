@@ -1,20 +1,20 @@
 package com.ingerencia.test.api.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 @SuppressWarnings("serial")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder(builderClassName = "Builder")
+@Getter
+@ToString(includeFieldNames = true)
 public class HackerNewsModel implements Serializable {
 
 	private String title;
 	private String author;
-	private Date created;
+	private String created;
 	private String objectID;
+	private String icon;
 }
