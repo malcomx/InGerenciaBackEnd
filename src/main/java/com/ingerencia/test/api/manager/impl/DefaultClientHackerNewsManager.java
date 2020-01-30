@@ -97,7 +97,10 @@ public class DefaultClientHackerNewsManager implements ClientHackerNewsManager {
 							.stream()
 							// Filtro. Solo permite mostrar las noticias que no hayan sido eliminadas
 							.filter(p -> StringUtils.isNotBlank(p.getObjectID()) 
-									&& !allNews.stream().anyMatch(v -> !v.getDeleted() && v.getObjectID().equals(p.getObjectID())))
+									&& (
+											!allNews.stream().anyMatch(v -> v.getObjectID().equals(p.getObjectID()))
+										)
+									)
 							.map(n -> {
 								return new HackerNewsEntity(
 										n.getObjectID(), 
