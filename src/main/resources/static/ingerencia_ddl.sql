@@ -42,8 +42,6 @@ ALTER USER ingerencia_user WITH SUPERUSER;
 ALTER DATABASE ingerencia_db SET search_path TO test_schema;
 
 -- Crea la tabla hacker_news
--- Esta tabla solo almacena las noticias eliminadas
-
 CREATE TABLE hacker_news (
     id VARCHAR(30) NOT NULL, -- Asociado a la propiedad ObjectID del JSON de Hacker News
     title TEXT,
