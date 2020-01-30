@@ -53,9 +53,11 @@ public class TestController {
 	@CrossOrigin
 	@GetMapping(value = "/news/{id}")
 	public List<HackerNewsModel> removeNews(@PathVariable(name = "id") String id) throws InGerenciaException {
-//		"Telf: 0212-9080624"
+		
+		log.info("Removiendo noticia..");
+		
 		try {
-			// Obtiene las noticias
+			// Remueve la noticia en la DB y obtiene las noticias
 			return this.clientHackerNewsManager.removeNews(id);
 		
 		} catch (InGerenciaException ex) {
