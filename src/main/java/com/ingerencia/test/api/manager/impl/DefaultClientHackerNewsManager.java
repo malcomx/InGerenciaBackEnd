@@ -70,10 +70,10 @@ public class DefaultClientHackerNewsManager implements ClientHackerNewsManager {
 			this.newsRepository.setFixedDeletedFor(Boolean.TRUE, id);
 
 			// TODO Consulta en la base de datos las noticias activas
-//			List<HackerNewsEntity> entities = (List<HackerNewsEntity>) this.newsRepository.findByDeletedFalseOrderByCreatedDesc();
+			List<HackerNewsEntity> entities = (List<HackerNewsEntity>) this.newsRepository.findByDeletedFalseOrderByCreatedDesc();
 			
-//			return inGerenciaUtil.build(entities);
-			return this.getAllNews();
+			return inGerenciaUtil.build(entities);
+//			return this.getAllNews();
 			
 		} catch (Exception ex) {
 			log.error("Error persistiendo en Remove News", ex);
